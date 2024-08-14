@@ -1,0 +1,7 @@
+{
+    "modal_list": ["magnet","0094"],
+    "enhance_list": ["log1p", 1],
+    "epochs": 100,
+    "test_freq": 3,
+    "save_freq": 3
+}

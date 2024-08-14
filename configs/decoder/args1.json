@@ -1,0 +1,39 @@
+{
+    "decoder_config_dir": "None",
+    "encoder_config_dir": "None",
+    "load_id": 200,
+    "batch_size": 400,
+    "learning_rate": 0.1,
+    "epochs": 100,
+    "test_freq": 10,
+    "save_freq": 2,
+    "num_workers": 16,
+    "embed_dim": 512,
+    "output_dim": 1024,
+    "hidden_dim_1": 1024,
+    "hidden_dim_2": 1024,
+    "hidden_dim_3": 1024,
+    "token_type": "all embedding",
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "decode_modal": "magnet",
+    "enhance_list": [
+        [
+            "None",
+            1
+        ],
+        [
+            "None",
+            1
+        ]
+    ],
+    "image_preprocess": [
+            224,
+            0.5,
+            90
+    ],
+    "device": "cuda:0",
+    "checkpoint_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP/checkpoints/"
+}

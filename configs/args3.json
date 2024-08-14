@@ -1,0 +1,39 @@
+{
+    "config_dir": "None",
+    "batch_size": 400,
+    "learning_rate": 0.1,
+    "epochs": 100,
+    "test_freq": 10,
+    "save_freq": 2,
+    "num_workers": 16,
+    "embed_dim": 512,
+    "vision_width": 768,
+    "image_resolution_mag": 224,
+    "vision_layers_mag": 12,
+    "vision_patch_size_mag": 32,
+    "image_resolution_H": 224,
+    "vision_layers_H": 12,
+    "vision_patch_size_H": 32,
+    "token_type": "class embedding",
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "enhance_list": [
+        [
+            "None",
+            1
+        ],
+        [
+            "None",
+            1
+        ]
+    ],
+    "image_preprocess": [
+            224,
+            0.5,
+            90
+    ],
+    "device": "cuda:0",
+    "checkpoint_path": "/home/huxing/202407/ctf/checkpoints/"
+}

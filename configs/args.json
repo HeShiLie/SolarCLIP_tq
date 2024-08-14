@@ -1,0 +1,36 @@
+{
+    "config_dir": "None",
+    "batch_size": 256,
+    "learning_rate": 0.1,
+    "epochs": 50,
+    "test_freq": 10,
+    "save_freq": 10,
+    "num_workers": 8,
+    "embed_dim": 512,
+    "vision_width": 768,
+    "image_resolution_mag": 224,
+    "vision_layers_mag": 12,
+    "vision_patch_size_mag": 32,
+    "image_resolution_H": 224,
+    "vision_layers_H": 12,
+    "vision_patch_size_H": 32,
+    "token_type": "class embedding",
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "enhance_list": [
+        [
+            "log1p",
+            224,
+            1
+        ],
+        [
+            "log1p",
+            224,
+            1
+        ]
+    ],
+    "device": "cuda:0",
+    "checkpoint_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP/checkpoints/"
+}

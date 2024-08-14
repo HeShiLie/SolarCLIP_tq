@@ -1,0 +1,46 @@
+{
+    "config_dir": "None",
+    "batch_size": 400,
+    "learning_rate": 0.1,
+    "epochs": 100,
+    "test_freq": 4,
+    "save_freq": 4,
+    "inner_loss_rate": 0,
+    "num_workers": 16,
+    "time_step": 720,
+    "vision_width": 768,
+    "image_resolution_mag": 1024,
+    "vision_patch_size_mag": 64,
+    "hidden_dropout_prob_embeddings_mag": 0.1,
+    "vision_layers_mag": 12,
+    "hidden_dropout_prob_transformer_mag": 0.1,
+    "image_resolution_H": 1024,
+    "vision_patch_size_H": 64,
+    "hidden_dropout_prob_embeddings_H": 0.1,
+    "vision_layers_H": 12,
+    "hidden_dropout_prob_transformer_H": 0.1,
+    "embed_mag_pt": "./checkpoints/pretrain_4/log1p/magnet/model/epoch_9.pt",
+    "embed_0094_pt": "./checkpoints/pretrain_4/log1p/0094/model/epoch_9.pt",
+    "token_type": "all embedding",
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "enhance_list": [
+        [
+            "log1p",
+            1
+        ],
+        [
+            "log1p",
+            1
+        ]
+    ],
+    "image_preprocess": [
+            1024,
+            0.5,
+            90
+    ],
+    "device": "cuda:0",
+    "checkpoint_path": "/mnt/tianwen-tianqing-nas/tianwen/home/202407/ctf/SolarCLIP/checkpoints/"
+}

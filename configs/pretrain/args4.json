@@ -1,0 +1,7 @@
+{
+    "modal": "0094",
+    "enhance_list": ["log1p", 1],
+    "epochs": 11,
+    "test_freq": 3,
+    "save_freq": 3
+}

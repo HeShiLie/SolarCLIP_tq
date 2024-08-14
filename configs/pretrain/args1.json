@@ -1,0 +1,7 @@
+{
+    "modal": "magnet",
+    "enhance_list": ["None", 1],
+    "epochs": 11,
+    "test_freq": 3
+
+}
