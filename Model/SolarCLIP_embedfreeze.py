@@ -9,7 +9,7 @@ import numpy as np
 from einops import einsum
 
 from .encoder_copy import ViTransformer
-from .get_weights_tq import get_weights
+from .TQ_get_weights import get_weights
 
 class SolarCLIP_MODEL(nn.Module):
     def __init__(self,
@@ -122,6 +122,7 @@ class SolarCLIP_MODEL(nn.Module):
 
             logits_per_mag = logit_scale * cor_matrix
             logits_per_H = logits_per_mag.t()
+            inner_cor_matrix = logit_scale * inner_cor_matrix
 
         # shape = [global_batch_size, global_batch_size]
         # return logits_per_mag, logits_per_H

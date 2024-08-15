@@ -12,8 +12,8 @@ import time
 from Model.encoder import Embeddings,PretrainModel
 from Model.decoder import LinearDecoder
 
-from Solarclip_train_tq import load_args_from_json
-from Solarclip_test_tq import calculate_loss_pretrain
+from TQ_Solarclip_train import load_args_from_json
+from TQ_Solarclip_test import calculate_loss_pretrain
 from Data.Solardataloader import enhance_funciton
 from Data.utils import transfer_date_to_id
 import Data.Solardataloader_subset as Solardataloader_subset

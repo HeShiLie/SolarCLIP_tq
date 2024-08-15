@@ -6,7 +6,7 @@ from Model.SolarCLIP import SolarCLIP_MODEL
 import matplotlib.pyplot as plt
 import numpy as np
 
-from Model.get_weights_tq import get_weights
+from Model.TQ_get_weights import get_weights
 
 def plot_matrix_with_images(cor_matrix, inner_cor_matrix,row_images, col_images, save_path=None,inner_loss_rate=0):
     
@@ -23,8 +23,10 @@ def plot_matrix_with_images(cor_matrix, inner_cor_matrix,row_images, col_images,
     vmin_0094 = np.min(col_images)
     vmax_0094 = np.max(col_images)
 
-    cor_matrix = np.exp(cor_matrix*10)
-    cor_matrix = cor_matrix / np.max(cor_matrix)
+    # cor_matrix = np.exp(cor_matrix*10)
+    # cor_matrix = cor_matrix / np.max(cor_matrix)
+    vmin_cor_matrix = -np.max(np.abs(cor_matrix))
+    vmax_cor_matrix = -vmin_cor_matrix
 
     cor_matrix_row_max_indices = np.argmax(cor_matrix, axis=1)
     cor_matrix_col_max_indices = np.argmax(cor_matrix, axis=0)
@@ -38,16 +40,16 @@ def plot_matrix_with_images(cor_matrix, inner_cor_matrix,row_images, col_images,
                     ax[i+1, j+1].text(0.5, 0.5, f'{cor_matrix[i, j]:.4f}', transform=ax[i+1, j+1].transAxes,
                             ha='center', va='center', fontsize=20, color='red',fontweight='bold')
                     full_color = np.ones([2*(num_cols+1), 2*(num_rows+1)])*cor_matrix[i, j]
-                    ax[i+1, j+1].imshow(full_color, cmap='RdBu',vmin=-0.7, vmax=0.7)
+                    ax[i+1, j+1].imshow(full_color, cmap='RdBu',vmin=vmin_cor_matrix, vmax=vmax_cor_matrix)
                     ax[i+1, j+1].set_xticks([])
                     ax[i+1, j+1].set_yticks([])
                 elif i == cor_matrix_col_max_indices[j]:
-                    # ax[i+1, j+1].text(0.5, 0.5, f'{cor_matrix[i, j]:.4f}', transform=ax[i+1, j+1].transAxes,
-                    #         ha='center', va='center', fontsize=20, color='red',fontweight='bold')
-                    # full_color = np.ones([2*(num_cols+1), 2*(num_rows+1)])*cor_matrix[i, j]
-                    # ax[i+1, j+1].imshow(full_color, cmap='RdBu',vmin=-0.7, vmax=0.7)
-                    # ax[i+1, j+1].set_xticks([])
-                    # ax[i+1, j+1].set_yticks([])
+                    ax[i+1, j+1].text(0.5, 0.5, f'{cor_matrix[i, j]:.4f}', transform=ax[i+1, j+1].transAxes,
+                            ha='center', va='center', fontsize=20, color='black',fontweight='bold')
+                    full_color = np.ones([2*(num_cols+1), 2*(num_rows+1)])*cor_matrix[i, j]
+                    ax[i+1, j+1].imshow(full_color, cmap='RdBu',vmin=-0.7, vmax=0.7)
+                    ax[i+1, j+1].set_xticks([])
+                    ax[i+1, j+1].set_yticks([])
                     pass
                 else:
                     ax[i+1, j+1].text(0.5, 0.5, f'{cor_matrix[i, j]:.4f}', transform=ax[i+1, j+1].transAxes,
@@ -107,10 +109,10 @@ def calculate_loss(model,batch, inner_loss_rate = 0, criterion = torch.nn.functi
 
     assert inner_loss_rate >=0
     if inner_loss_rate > 0:
-        ground_truth = torch.arange(inner_cor_matrix.shape[-1], dtype=torch.long, device=inner_cor_matrix.device)#[l]
-        ground_truth = ground_truth.unsqueeze(0).expand(inner_cor_matrix.shape[1],-1) # [B,L]
+        ground_truth = torch.arange(inner_cor_matrix.shape[-1], dtype=torch.long, device=inner_cor_matrix.device)#[L]
+        ground_truth = ground_truth.unsqueeze(0).expand(inner_cor_matrix.shape[0],-1) # [B,L]
         loss_inner = criterion(rearrange(inner_cor_matrix,' B L l -> (B L) l'),rearrange(ground_truth,'B L -> (B L)'))/2
-        loss_inner += criterion(rearrange(inner_cor_matrix,' B L l -> (B l) L'),rearrange(ground_truth,'B l -> (B l)'))/2
+        loss_inner = loss_inner + criterion(rearrange(inner_cor_matrix,' B L l -> (B l) L'),rearrange(ground_truth,'B l -> (B l)'))/2
     else:
         loss_inner = torch.tensor(0, dtype=torch.float32, device=inner_cor_matrix.device)
 

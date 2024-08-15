@@ -1,16 +1,14 @@
 from torch import nn
 import torch
 
-from Model.get_weights_tq import get_weights
-from .image_encoder_tq import patch_norm,Transformer
+from Model.TQ_get_weights import get_weights
+from .TQ_image_encoder import patch_norm,Transformer
     
 class Embeddings(nn.Module):
     def __init__(self, width: int, input_resolution: int, patch_size: int, in_channels: int, hidden_dropout_prob: float):
         super().__init__()
         self.scale = width ** -0.5
         self.class_embedding = nn.Parameter(self.scale * torch.randn(width))
-        # self.positional_embedding = nn.Parameter(self.scale * torch.randn((input_resolution // patch_size) ** 2 + 1, width))
-        self.positional_embedding = nn.Parameter( torch.zeros((input_resolution // patch_size)**2+1, width))
         self.conv1 = nn.Conv2d(in_channels=in_channels, out_channels=width, kernel_size=patch_size, stride=patch_size, bias=False)
         self.ln_pre = patch_norm('bn1d', width)
         self.dropout = nn.Dropout(hidden_dropout_prob)
@@ -24,8 +22,6 @@ class Embeddings(nn.Module):
         x = self.ln_pre(x)
         x = torch.cat([self.class_embedding.to(x.dtype) + torch.zeros(x.shape[0], 1, x.shape[-1], dtype=x.dtype, device=x.device), x], dim=1)  # shape = [*, grid ** 2 + 1, width]
         #x shape = [batch_size, num_patches, embed_dim]
-
-        x = x + self.positional_embedding.to(x.dtype)
         x= self.dropout(x)
         # output shape = [batch_size, num_patches, embed_dim=width]
         return x

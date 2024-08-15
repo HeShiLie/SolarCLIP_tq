@@ -116,6 +116,7 @@ class SolarCLIP_MODEL(nn.Module):
 
             logits_per_mag = logit_scale * cor_matrix
             logits_per_H = logits_per_mag.t()
+            inner_cor_matrix = logit_scale * inner_cor_matrix
 
         # shape = [global_batch_size, global_batch_size]
         # return logits_per_mag, logits_per_H

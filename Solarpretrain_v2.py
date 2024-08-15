@@ -3,6 +3,7 @@ import torch.multiprocessing as mp
 import numpy as np
 import pickle
 import argparse
+import json
 
 import os
 import time
@@ -10,10 +11,17 @@ import time
 from Model.encoder import Embeddings,PretrainModel
 from Model.decoder import LinearDecoder
 
-from Solarclip_train_tq import load_args_from_json
+from TQ_Solarclip_train import load_args_from_json
 from Data.Solardataloader import enhance_funciton
 from Data.utils import transfer_date_to_id
 import Data.Solardataloader_subset as Solardataloader_subset
+
+def load_args_from_json(args,config_dir):
+    with open(f'{config_dir}', 'r') as f:
+        arg_json = json.load(f)
+    for arg in arg_json:
+        setattr(args, arg, arg_json[arg])
+    return args
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Pretrain encoder and decoder SolarCLIP model.')
@@ -24,6 +32,7 @@ def parse_args():
     parser.add_argument('--enhance_list', type=list, nargs="+", default=
                         ['log1p', 1], help='Enhance list for training')
 
+    parser.add_argument('--checkpoint_path', type=str, default='/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/pretrain/')
     return parser.parse_args()
 
 def train(train_loader, val_loader, 
@@ -41,7 +50,8 @@ def train(train_loader, val_loader,
     pretrainModel_mag = PretrainModel(encoder, decoder).to(device)
     pretrainModel_0094 = PretrainModel(encoder, decoder).to(device)
 
-    checkpoint_path_mag = f'/mnt/nas/home/huxing/202407/ctf/SolarCLIP/checkpoints/pretrain_5/{enhance_list[0]}/magnet/'
+    checkpoint_path = '/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/pretrain/log1p_magnet_cv_0094_3sgmcontinous_noposembedding/'
+    checkpoint_path_mag = checkpoint_path + 'magnet/'
     logger_checkpoint_path_mag = checkpoint_path_mag + 'logger/'
     model_checkpoint_path_mag = checkpoint_path_mag + 'model/'
     if not os.path.exists(checkpoint_path_mag):
@@ -51,7 +61,7 @@ def train(train_loader, val_loader,
     if not os.path.exists(f'{logger_checkpoint_path_mag}'):
         os.makedirs(f'{logger_checkpoint_path_mag}')
 
-    checkpoint_path_0094 = f'/mnt/nas/home/huxing/202407/ctf/SolarCLIP/checkpoints/pretrain_5/{enhance_list[0]}/0094/'
+    checkpoint_path_0094 = checkpoint_path + '0094/'
     logger_checkpoint_path_0094 = checkpoint_path_0094 + 'logger/'
     model_checkpoint_path_0094 = checkpoint_path_0094 + 'model/'
     if not os.path.exists(checkpoint_path_0094):

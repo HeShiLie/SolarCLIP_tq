@@ -77,9 +77,11 @@ def dl_and_convert(modal,exist_idx_list, time_interval = [0,1e+32]):
                             if not os.path.exists(pt_dir):
                                 os.makedirs(pt_dir)
                             torch.save(pt_img, dir_pt)
-                            exist_idx_list[i] = True
-                        except:
-                            pass
+                            # exist_idx_list[i] = True
+                        except Exception as e:
+                            print(f"Error occured : {e}, delete {dir_pt} if exists")
+                            if os.path.exists(dir_pt):
+                                os.remove(dir_pt)                           
                     except Exception as e:
                         error_url.append(url)
             else:
@@ -92,9 +94,11 @@ def dl_and_convert(modal,exist_idx_list, time_interval = [0,1e+32]):
 
 if __name__ == '__main__' :
 
-    with open('/mnt/nas/home/huxing/202407/ctf/SolarCLIP/Data/idx_list/magnet_exist_idx.pkl','rb') as f:
+    with open('/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/Data/idx_list/magnet_exist_idx.pkl','rb') as f:
         exist_idx_list = pickle.load(f)
-    i = 0
-    print(1000000*i,600000*(i+1))
+    i = 13
+    print(500000*i,500000*(i+1))
+    print('start date :', transfer_id_to_date(500000*i))
+    print('end date :', transfer_id_to_date(500000*(i+1)))
 
-    dl_and_convert('magnet',exist_idx_list,[1000000*i,600000*(i+1)])
+    dl_and_convert('magnet',exist_idx_list,[500000*i,500000*(i+1)])

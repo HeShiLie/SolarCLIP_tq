@@ -7,16 +7,16 @@ from types import SimpleNamespace
 # import clip
 # import clip.model
 
-from Data import Solardataloader_subset_tq
+from Data import TQ_Solardataloader_subset
 from Data.utils_tq import transfer_date_to_id
-from Data.Solardataloader_tq import enhance_funciton
+from Data.TQ_Solardataloader import enhance_funciton
 
 import os
 import random
 import time
 
-from Model.SolarCLIP_tq import get_model_from_args
-from Solarclip_test_tq import calculate_loss
+from Model.TQ_SolarCLIP import get_model_from_args
+from TQ_Solarclip_test import calculate_loss
 
 random.seed(42)
 
@@ -126,11 +126,11 @@ def main():
     start_time = time.time()
     start_date = transfer_date_to_id(2010, 5, 1)
     end_date = transfer_date_to_id(2020, 6, 30)
-    train_loader = Solardataloader_subset_tq.get_loader_by_time(time_interval=[
+    train_loader = TQ_Solardataloader_subset.get_loader_by_time(time_interval=[
                                                              start_date, end_date], modal_list=args.modal_list, load_imgs= False, enhance_list=args.image_preprocess, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
     start_date = transfer_date_to_id(2020, 6, 30)
     end_date = transfer_date_to_id(2024, 6, 30)
-    val_loader = Solardataloader_subset_tq.get_loader_by_time(time_interval=[
+    val_loader = TQ_Solardataloader_subset.get_loader_by_time(time_interval=[
                                                            start_date, end_date], modal_list=args.modal_list, load_imgs= False, enhance_list=[args.image_preprocess[0],0,0], batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
     print(f"DataLoader time: {(time.time()-start_time)/60:.2f} min")
 

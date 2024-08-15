@@ -5,8 +5,8 @@ import numpy as np
 from einops import einsum
 
 #for train
-from .image_encoder_tq import VisionTransformer
-from .get_weights_tq import get_weights
+from .TQ_image_encoder import VisionTransformer
+from .TQ_get_weights import get_weights
 #for test in this dir
 #from image_encoder import VisionTransformer,LayerNorm
 #from txt_encoder import TextTransformer

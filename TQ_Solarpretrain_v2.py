@@ -12,11 +12,11 @@ import time
 from Model.encoder import Embeddings,PretrainModel
 from Model.decoder import LinearDecoder
 
-from Solarclip_train_tq import load_args_from_json
-from Solarclip_test_tq import calculate_loss_pretrain
-from Data.Solardataloader_tq import enhance_funciton
+from TQ_Solarclip_train import load_args_from_json
+from TQ_Solarclip_test import calculate_loss_pretrain
+from Data.TQ_Solardataloader import enhance_funciton
 from Data.utils_tq import transfer_date_to_id
-import Data.Solardataloader_subset_tq as Solardataloader_subset
+import Data.TQ_Solardataloader_subset as Solardataloader_subset
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Pretrain encoder and decoder SolarCLIP model.')

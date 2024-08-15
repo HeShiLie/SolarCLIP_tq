@@ -1,7 +1,9 @@
 {
+    "config_dir": "None",
     "modal_list": ["magnet","0094"],
     "enhance_list": ["log1p", 1],
     "epochs": 100,
-    "test_freq": 3,
-    "save_freq": 3
+    "test_freq": 25,
+    "save_freq": 25,
+    "checkpoint_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/pretrain/log1p_magnet_cv_0094_3sgmcontinous_no_posembedding"
 }

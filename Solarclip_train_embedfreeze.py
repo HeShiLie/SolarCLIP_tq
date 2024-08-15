@@ -117,8 +117,10 @@ def main():
     for arg in vars(args):
         print(f"{arg:<30}: {getattr(args, arg)}")
 
-    checkpoint_path = args.checkpoint_path + 'embedfreeze/'
+    checkpoint_path = args.checkpoint_path 
+    checkpoint_path += 'epochs_' + str(args.epochs) + '/'
     checkpoint_path += args.token_type + '/'
+    checkpoint_path += 'inner_loss_rate_' + str(args.inner_loss_rate) + '/'
     for i in range(len(args.modal_list)):
         checkpoint_path += args.modal_list[i] + '_'
         for j in range(len(args.enhance_list[i])):
@@ -207,8 +209,8 @@ def main():
             epoch_time = time.time()
 
             optimizer.zero_grad()
-            loss_inner*=args.inner_loss_rate
-            loss+=loss_inner
+            loss_inner = loss_inner*args.inner_loss_rate
+            loss = loss + loss_inner
             loss.backward()
             optimizer.step()
             iteration_txt += f" Backward time: {(time.time()-epoch_time)/60:.2f} min |"

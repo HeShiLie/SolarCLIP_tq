@@ -1,7 +1,7 @@
 from torch import nn
 import torch
 
-from .image_encoder_tq import patch_norm,Transformer
+from .TQ_image_encoder import patch_norm,Transformer
     
 class Embeddings(nn.Module):
     def __init__(self, width: int, input_resolution: int, patch_size: int, in_channels: int, hidden_dropout_prob: float):
