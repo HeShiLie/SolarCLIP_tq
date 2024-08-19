@@ -123,6 +123,7 @@ class SolarCLIP_MODEL(nn.Module):
         return logits_per_mag, logits_per_H, inner_cor_matrix
     
 
+
 def get_model_from_args(args):
     return SolarCLIP_MODEL(
             embed_dim = args.embed_dim,

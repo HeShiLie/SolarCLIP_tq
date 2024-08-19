@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from Model.TQ_get_weights import get_weights
-
 def plot_matrix_with_images(cor_matrix, inner_cor_matrix,row_images, col_images, save_path=None,inner_loss_rate=0):
     
     border_width = 2
@@ -110,9 +109,8 @@ def calculate_loss(model,batch, inner_loss_rate = 0, criterion = torch.nn.functi
     assert inner_loss_rate >=0
     if inner_loss_rate > 0:
         ground_truth = torch.arange(inner_cor_matrix.shape[-1], dtype=torch.long, device=inner_cor_matrix.device)#[L]
-        ground_truth = ground_truth.unsqueeze(0).expand(inner_cor_matrix.shape[0],-1) # [B,L]
-        loss_inner = criterion(rearrange(inner_cor_matrix,' B L l -> (B L) l'),rearrange(ground_truth,'B L -> (B L)'))/2
-        loss_inner = loss_inner + criterion(rearrange(inner_cor_matrix,' B L l -> (B l) L'),rearrange(ground_truth,'B l -> (B l)'))/2
+        loss_inner = criterion(inner_cor_matrix,ground_truth)/2
+        loss_inner = loss_inner + criterion(inner_cor_matrix.t(),ground_truth)/2
     else:
         loss_inner = torch.tensor(0, dtype=torch.float32, device=inner_cor_matrix.device)
 

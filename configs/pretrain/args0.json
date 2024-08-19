@@ -1,0 +1,38 @@
+{
+    "config_path": "None",
+    "batch_size": 32,
+    "optimizer": "AdamW",
+    "lr": 0.0004,
+    "epochs": 100,
+    "test_freq": 10,
+    "save_freq": 10,
+    "device": "cuda:3",
+    "input_size": 1024,
+    "embedding_dim": 768,
+    "input_dim": 1,
+    "patch_size": 64,
+    "dropout_prob": 0.1,
+    "output_dim": 1,
+    "output_size": 1024,
+    "deprojection_type": "linear",
+    "with_bias": true,
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "enhance_list": [
+        "log1p",
+        1
+    ],
+    "image_preprocess": [
+        1024,
+        0.5,
+        90
+    ],
+    "weights_type_list": [
+        "cv-rdbu",
+        "3sgm-continous"
+    ],
+    "checkpoint_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/pretrain/",
+    "log_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/log/pretrain/"
+}

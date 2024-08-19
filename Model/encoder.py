@@ -1,7 +1,7 @@
 from torch import nn
 import torch
 
-from Model.TQ_get_weights import get_weights
+from Model.get_weights import get_weights
 from .TQ_image_encoder import patch_norm,Transformer
     
 class Embeddings(nn.Module):

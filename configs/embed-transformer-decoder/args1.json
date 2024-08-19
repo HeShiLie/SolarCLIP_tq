@@ -2,9 +2,9 @@
     "config_dir": "None",
     "batch_size": 32,
     "learning_rate": 0.1,
-    "epochs": 1000,
-    "test_freq": 100,
-    "save_freq": 100,
+    "epochs": 100,
+    "test_freq": 10,
+    "save_freq": 10,
     "inner_loss_rate": 0,
     "num_workers": 0,
     "time_step": 720,
@@ -41,6 +41,6 @@
             0.5,
             90
     ],
-    "device": "cuda:1",
+    "device": "cuda:0",
     "checkpoint_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/embedfreeze/"
 }

@@ -9,7 +9,7 @@ import numpy as np
 from einops import einsum
 
 from .encoder_copy import ViTransformer
-from .TQ_get_weights import get_weights
+from .get_weights import get_weights
 
 class SolarCLIP_MODEL(nn.Module):
     def __init__(self,
@@ -117,6 +117,7 @@ class SolarCLIP_MODEL(nn.Module):
             mag_features = torch.einsum('BLD,BLd->BLD', mag_features, token_weight_1)
             H_features = torch.einsum('BLD,BLd->BLD', H_features, token_weight_2)
             inner_cor_matrix = torch.einsum('BLD,BlD->BLl', mag_features, H_features)
+            inner_cor_matrix = inner_cor_matrix.mean(dim=0) # [L,L]
             cor_matrix = torch.einsum('BLD,bLD->BbL', mag_features, H_features)
             cor_matrix = cor_matrix.mean(dim=-1) # [B,B]
 

@@ -197,8 +197,7 @@ def main():
 
         scheduler.step()
 
-        print(f"epoch {epoch+1:<6}: Loss = {loss.item():<7.8f} | Loss_inner = {loss_inner.item():<7.8f} | acc = {np.mean(acc_results):<7.2%} | Lr rate = {
-              scheduler.get_last_lr()[0]:<7.8f} | Time = {(time.time()-start_time)/60:.2f} min")
+        print(f"epoch {epoch+1:<6}: Loss = {loss.item():<7.8f} | Loss_inner = {loss_inner.item():<7.8f} | acc = {np.mean(acc_results):<7.2%} | Lr rate = {scheduler.get_last_lr()[0]:<7.8f} | Time = {(time.time()-start_time)/60:.2f} min")
         start_time = time.time()
 
         if (epoch+1) % test_epoch == 0:

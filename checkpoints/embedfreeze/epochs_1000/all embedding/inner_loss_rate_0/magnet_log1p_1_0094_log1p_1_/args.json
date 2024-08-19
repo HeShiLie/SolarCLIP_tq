@@ -1,0 +1,71 @@
+{
+    "config_dir": "configs/embed-transformer-decoder/args1.json",
+    "batch_size": 32,
+    "learning_rate": 0.1,
+    "epochs": 1000,
+    "test_freq": 100,
+    "save_freq": 100,
+    "inner_loss_rate": 0,
+    "num_workers": 0,
+    "train_date_list": [
+        [
+            2010,
+            5,
+            1
+        ],
+        [
+            2020,
+            6,
+            30
+        ]
+    ],
+    "test_date_list": [
+        [
+            2020,
+            6,
+            30
+        ],
+        [
+            2024,
+            6,
+            30
+        ]
+    ],
+    "time_step": 720,
+    "load_images": true,
+    "vision_width": 768,
+    "image_resolution_mag": 1024,
+    "vision_patch_size_mag": 64,
+    "hidden_dropout_prob_embeddings_mag": 0.1,
+    "vision_layers_mag": 12,
+    "hidden_dropout_prob_transformer_mag": 0.1,
+    "image_resolution_H": 1024,
+    "vision_patch_size_H": 64,
+    "hidden_dropout_prob_embeddings_H": 0.1,
+    "vision_layers_H": 12,
+    "hidden_dropout_prob_transformer_H": 0.1,
+    "token_type": "all embedding",
+    "embed_mag_pt": "./checkpoints/pretrain_4/log1p/magnet/model/epoch_9.pt",
+    "embed_0094_pt": "./checkpoints/pretrain_4/log1p/0094/model/epoch_9.pt",
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "enhance_list": [
+        [
+            "log1p",
+            1
+        ],
+        [
+            "log1p",
+            1
+        ]
+    ],
+    "image_preprocess": [
+        1024,
+        0.5,
+        90
+    ],
+    "device": "cuda:1",
+    "checkpoint_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/embedfreeze/"
+}
