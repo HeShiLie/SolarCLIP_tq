@@ -1,0 +1,47 @@
+{
+    "config_dir": "None",
+    "batch_size": 64,
+    "learning_rate": 0.1,
+    "epochs": 1000,
+    "test_freq": 100,
+    "save_freq": 100,
+    "inner_loss_rate": 0,
+    "device": "cuda:1",
+    "num_workers": 0,
+    "embed_dim": 768,
+    "vision_width": 768,
+    "image_resolution_mag": 1024,
+    "vision_layers_mag": 12,
+    "vision_patch_size_mag": 64,
+    "image_resolution_H": 1024,
+    "vision_layers_H": 12,
+    "vision_patch_size_H": 64,
+    "token_type": "all embedding",
+    "weight_type_list": [
+        "cv-rdbu",
+        "3sgm-continous"
+    ],
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "enhance_list": [
+        [
+            "log1p",
+            1
+        ],
+        [
+            "log1p",
+            1
+        ]
+    ],
+    "image_preprocess": [
+        1024,
+        0.5,
+        90
+    ],
+    "embed_state_root": "checkpoints/pretrain/endecoder_distinct/modal_magnet_0094/enhance_log1p_1/preprocess_1024_0.5_90/weights_typecv-rdbu_3sgm-continous",
+    "embed_model1_id": 100,
+    "embed_model2_id": 100,
+    "checkpoint_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/SolarCLIP_freeze/"
+}

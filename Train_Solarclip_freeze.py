@@ -41,7 +41,7 @@ def parse_args():
     parser.add_argument('--inner_loss_rate', type=float, 
                         default=0, help='Inner loss rate for training')
     parser.add_argument('--device', type=str,
-                        default='cuda:0', help='Device for training')
+                        default='cuda:1', help='Device for training')
 
     # DataLoader parameters
     parser.add_argument('--num_workers', type=int, default=0,
@@ -78,7 +78,7 @@ def parse_args():
     parser.add_argument('--embed_model1_id', type=int, required=True, help='select the model id for the first modal')
     parser.add_argument('--embed_model2_id', type=int, required=True, help='select the model id for the second modal')
     parser.add_argument("--checkpoint_path", type=str,
-                        default="/mnt/nas/home/huxing/202407/ctf/SolarCLIP/checkpoints/SolarCLIP_freeze/", help="The output path to save the model.")
+                        default="/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/SolarCLIP_freeze/", help="The output path to save the model.")
 
     return parser.parse_args()
 
@@ -150,10 +150,10 @@ def main():
     encoder_decoder.to(device)
     SolarModel.visual_mag.conv1.load_state_dict(encoder_decoder.encoder.state_dict())
 
-    encoder_2_dir = f'{args.embed_state_root}/{args.modal_list[1]}/model/epoch_{args.embed_model2_id}.pt'
-    encoder_2_state_dict = torch.load(encoder_2_dir, map_location=torch.device('cpu'))
-    encoder_decoder.load_state_dict(encoder_2_state_dict['model'])
-    encoder_decoder.to(device)
+    # encoder_2_dir = f'{args.embed_state_root}/{args.modal_list[1]}/model/epoch_{args.embed_model2_id}.pt'
+    # encoder_2_state_dict = torch.load(encoder_2_dir, map_location=torch.device('cpu'))
+    # encoder_decoder.load_state_dict(encoder_2_state_dict['model'])
+    # encoder_decoder.to(device)
     SolarModel.visual_H.conv1.load_state_dict(encoder_decoder.encoder.state_dict())
     del encoder_decoder
 

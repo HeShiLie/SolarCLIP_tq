@@ -1,0 +1,51 @@
+{
+    "config_dir": "./configs/SolarCLIP/TQ_args1.json",
+    "batch_size": 32,
+    "optimizer": "SGD",
+    "learning_rate": 0.1,
+    "epochs": 1000,
+    "test_freq": 100,
+    "save_freq": 100,
+    "inner_loss_rate": 0,
+    "device": "cuda:0",
+    "checkpoint_path": "/mnt/tianwen-tianqing-nas/tianwen/home/202407/ctf/SolarCLIP/checkpoints/SolarCLIP/inner_loss_rate_0/",
+    "num_workers": 0,
+    "machine": "TQ",
+    "embed_dim": 768,
+    "vision_width": 768,
+    "image_resolution_mag": 1024,
+    "vision_layers_mag": 12,
+    "vision_patch_size_mag": 64,
+    "image_resolution_H": 1024,
+    "vision_layers_H": 12,
+    "vision_patch_size_H": 64,
+    "token_type": "all embedding",
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "enhance_list": [
+        [
+            "log1p",
+            1
+        ],
+        [
+            "log1p",
+            1
+        ]
+    ],
+    "image_preprocess": [
+        1024,
+        0.5,
+        90
+    ],
+    "weight_type_list": [
+        "cv-rdbu",
+        "3sgm-continous"
+    ],
+    "time_step": 720,
+    "hidden_dropout_prob_embeddings_mag": 0.1,
+    "hidden_dropout_prob_transformer_mag": 0.1,
+    "hidden_dropout_prob_embeddings_H": 0.1,
+    "hidden_dropout_prob_transformer_H": 0.1
+}

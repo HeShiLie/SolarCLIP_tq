@@ -6,7 +6,7 @@ from Model.SolarCLIP import SolarCLIP_MODEL
 import matplotlib.pyplot as plt
 import numpy as np
 
-from Model.TQ_get_weights import get_weights
+from Model.get_weights import get_weights
 def plot_matrix_with_images(cor_matrix, inner_cor_matrix,row_images, col_images, save_path=None,inner_loss_rate=0):
     
     border_width = 2
