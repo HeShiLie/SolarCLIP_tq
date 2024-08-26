@@ -3,7 +3,7 @@
 **/__pycache__
 ./Data/dir_list/*
 ./Data/idx_list/*
-**.out
-**.log
 **.pkl
-**.ipynb
+**.log
+**.out
+
