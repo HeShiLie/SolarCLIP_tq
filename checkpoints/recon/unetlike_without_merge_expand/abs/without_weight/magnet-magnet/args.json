@@ -1,0 +1,51 @@
+{
+    "config_dir": "configs/recon/unetlike/args4.json",
+    "batch_size": 160,
+    "learning_rate": 0.1,
+    "epochs": 1000,
+    "test_freq": 100,
+    "save_freq": 100,
+    "early_stop": 1000,
+    "device": "cuda:0",
+    "num_workers": 0,
+    "token_type": "all embedding",
+    "in_channels": 1,
+    "input_resolution": 1024,
+    "patch_size": 64,
+    "width": 768,
+    "vit_layers": 12,
+    "transformer_layers": 2,
+    "hidden_dim": 768,
+    "norm_type": "bn1d",
+    "output_dim": 1,
+    "output_size": 1024,
+    "deprojection_type": "linear",
+    "with_bias": true,
+    "decoder_modal": "magnet-magnet",
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "enhance_list": [
+        [
+            "log1p",
+            1
+        ],
+        [
+            "log1p",
+            1
+        ]
+    ],
+    "image_preprocess": [
+        1024,
+        0.5,
+        90
+    ],
+    "weight_type": "cv-rdbu",
+    "weight_or_not": true,
+    "embed_state_root": "checkpoints/recon/0816_test1/SolarCLIP",
+    "clip_model_id": 200,
+    "abs": true,
+    "checkpoint_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/recon/unetlike_without_merge_expand/abs/without_weight/",
+    "optimizer": "SGD"
+}
