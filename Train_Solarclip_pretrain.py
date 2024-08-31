@@ -7,7 +7,7 @@ import json
 import os
 import time
 
-from Model.vit import PretrainModel
+from Model.models import PretrainModel
 from Model.get_weights import get_weights
 
 from Data.Solardataloader import enhance_funciton

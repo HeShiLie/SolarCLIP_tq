@@ -5,7 +5,7 @@ import numpy as np
 from einops import einsum, rearrange
 
 #for train
-from .vit import VisionTransformer, Decoder, PatchMerging, PatchExpand, Transformer, Remove_class_token
+from .models import VisionTransformer, Decoder, PatchMerging, PatchExpand, Transformer, Remove_class_token
 # from vit import VisionTransformer, Decoder, PatchMerging, PatchExpand, Transformer, Remove_class_token
 
 

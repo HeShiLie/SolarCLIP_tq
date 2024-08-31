@@ -17,7 +17,7 @@ import random
 import time
 
 from Model.SolarCLIP_modify import get_model_from_args, get_recon_model_from_args
-from Model.vit import PretrainModel
+from Model.models import PretrainModel
 
 random.seed(42)
 

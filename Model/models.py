@@ -3,6 +3,7 @@ import numpy as np
 import torch
 from collections import OrderedDict
 from einops import rearrange
+import math
 
 class LayerNorm(nn.LayerNorm):
    #使用的时候需要指定特征维度大小
@@ -185,7 +186,6 @@ class Decoder(nn.Module):
             x = rearrange(x, 'b (n_h n_w) c h w -> b c (n_h h) (n_w w)', n_h=self.n_h, n_w=self.n_h, c=self.c, h=self.h, w=self.h)
         return x
 
-    
 class PretrainModel(nn.Module):
     def __init__(self, 
                 input_size: int = 1024,
@@ -306,3 +306,186 @@ class VisionTransformer(nn.Module):
     x = self.transformer(x)
 
     return x
+ 
+ # ------------------ DiT ------------------
+
+def modulate(x, shift, scale):
+    return x * (1 + scale) + shift
+
+#################################################################################
+#               Embedding Layers for Timesteps and Class Labels                 #
+#################################################################################
+
+class TimestepEmbedder(nn.Module):
+    """
+    Embeds scalar timesteps into vector representations.
+    """
+    def __init__(self, hidden_size: int=768, frequency_embedding_size=256):
+        super().__init__()
+        self.mlp = nn.Sequential(
+            nn.Linear(frequency_embedding_size, hidden_size, bias=True),
+            QuickGELU(),
+            nn.Linear(hidden_size, hidden_size, bias=True),
+        )
+        self.frequency_embedding_size = frequency_embedding_size
+
+    @staticmethod
+    def timestep_embedding(t, dim, max_period=10000):
+        """
+        Create sinusoidal timestep embeddings.
+        :param t: a 1-D Tensor of N indices, one per batch element.
+                          These may be fractional.
+        :param dim: the dimension of the output.
+        :param max_period: controls the minimum frequency of the embeddings.
+        :return: an (N, D) Tensor of positional embeddings.
+        """
+        # https://github.com/openai/glide-text2im/blob/main/glide_text2im/nn.py
+        half = dim // 2
+        freqs = torch.exp(
+            -math.log(max_period) * torch.arange(start=0, end=half, dtype=torch.float32) / half
+        ).to(device=t.device)
+        args = t[:, None].float() * freqs[None]
+        embedding = torch.cat([torch.cos(args), torch.sin(args)], dim=-1)
+        if dim % 2:
+            embedding = torch.cat([embedding, torch.zeros_like(embedding[:, :1])], dim=-1)
+        return embedding
+
+    def forward(self, t):
+        t_freq = self.timestep_embedding(t, self.frequency_embedding_size)
+        t_emb = self.mlp(t_freq)
+        return t_emb
+class LabelEmbedder(nn.Module):  # todo
+    """
+    Embeds class labels into vector representations. Also handles label dropout for classifier-free guidance.
+    """
+    def __init__(self, num_classes, hidden_size, dropout_prob):
+        super().__init__()
+        use_cfg_embedding = dropout_prob > 0
+        self.embedding_table = nn.Embedding(num_classes + use_cfg_embedding, hidden_size)
+        self.num_classes = num_classes
+        self.dropout_prob = dropout_prob
+
+    def token_drop(self, labels, force_drop_ids=None):
+        """
+        Drops labels to enable classifier-free guidance.
+        """
+        if force_drop_ids is None:
+            drop_ids = torch.rand(labels.shape[0], device=labels.device) < self.dropout_prob
+        else:
+            drop_ids = force_drop_ids == 1
+        labels = torch.where(drop_ids, self.num_classes, labels)
+        return labels
+
+    def forward(self, labels, train, force_drop_ids=None):
+        use_dropout = self.dropout_prob > 0
+        if (train and use_dropout) or (force_drop_ids is not None):
+            labels = self.token_drop(labels, force_drop_ids)
+        embeddings = self.embedding_table(labels)
+        return embeddings
+class DiTBlock(nn.Module):
+    """
+    A DiT block with adaptive layer norm zero (adaLN-Zero) conditioning.
+    """
+    def __init__(self, width: int = 768, n_head: int = 16, norm_type: str = 'bn1d'):
+        super().__init__()
+        self.norm1 = patch_norm(width, norm_type= norm_type)
+        self.attn = nn.MultiheadAttention(width, n_head)
+        self.mlp = nn.Sequential(OrderedDict([ 
+            ("c_fc", nn.Linear(width, width * 4))
+            ("gelu", QuickGELU()),
+            ("c_proj", nn.Linear(width * 4, width))
+        ]))
+        self.norm2 = patch_norm(width, norm_type= norm_type)
+        self.adaLN_modulation = nn.Sequential(
+            QuickGELU(),
+            nn.Linear(width, 6 * width, bias=True)
+        )
+
+    def forward(self, x, c):
+        """
+        x: (B, L, D)
+        c: (B, 1, D)
+        """
+        shift_msa, scale_msa, gate_msa, shift_mlp, scale_mlp, gate_mlp = self.adaLN_modulation(c).chunk(6, dim=2)
+        x = x + gate_msa.unsqueeze(1) * self.attn(modulate(self.norm1(x), shift_msa, scale_msa)) # (B,L,D) -> (B,L,D)
+        x = x + gate_mlp.unsqueeze(1) * self.mlp(modulate(self.norm2(x), shift_mlp, scale_mlp)) # (B,L,D) -> (B,L,D)
+        return x
+    
+class DiTDecoder(nn.Module):
+    """
+    Diffusion model with a Transformer backbone.
+    """
+    def __init__(
+        self,
+        patch_size: int=64,
+        in_channels: int=4,
+        width: int=768,
+        depth: int=28,
+        num_heads: int=16,
+        output_dim: int=1,
+        output_size: int=1024,
+        deprojection_type: str='linear',
+        with_bias: bool=True,
+        norm_type='bn1d',
+        class_dropout_prob=0.1,
+        num_classes=1000,
+        learn_sigma=True,
+    ):
+        super().__init__()
+        self.learn_sigma = learn_sigma
+        self.in_channels = in_channels
+        self.out_channels = in_channels * 2 if learn_sigma else in_channels
+        self.patch_size = patch_size
+        self.num_heads = num_heads
+
+        self.t_embedder = TimestepEmbedder(width)
+        self.y_embedder = LabelEmbedder(num_classes, width, class_dropout_prob)
+
+        self.blocks = nn.ModuleList([
+            DiTBlock(width, num_heads, norm_type) for _ in range(depth)
+        ])
+        self.final_decoder = Decoder(width, output_dim, patch_size, output_size, deprojection_type, with_bias)
+        
+        self.initialize_weights()
+
+    def initialize_weights(self): # todo
+        # Initialize transformer layers:
+        def _basic_init(module):
+            if isinstance(module, nn.Linear):
+                torch.nn.init.xavier_uniform_(module.weight)
+                if module.bias is not None:
+                    nn.init.constant_(module.bias, 0)
+        self.apply(_basic_init)
+
+        # Initialize label embedding table:
+        nn.init.normal_(self.y_embedder.embedding_table.weight, std=0.02)
+
+        # Initialize timestep embedding MLP:
+        nn.init.normal_(self.t_embedder.mlp[0].weight, std=0.02)
+        nn.init.normal_(self.t_embedder.mlp[2].weight, std=0.02)
+
+        # Zero-out adaLN modulation layers in DiT blocks:
+        for block in self.blocks:
+            nn.init.constant_(block.adaLN_modulation[-1].weight, 0)
+            nn.init.constant_(block.adaLN_modulation[-1].bias, 0)
+
+        # Zero-out output layers:  # todo
+        nn.init.constant_(self.final_layer.adaLN_modulation[-1].weight, 0)
+        nn.init.constant_(self.final_layer.adaLN_modulation[-1].bias, 0)
+        nn.init.constant_(self.final_layer.linear.weight, 0)
+        nn.init.constant_(self.final_layer.linear.bias, 0)
+
+    def forward(self, x, t, y):
+        """
+        Forward pass of DiT.
+        x: (B, L, D) tensor of input features
+        t: (N,) tensor of diffusion timesteps
+        y: (B, 1, D) tensor of class labels
+        """
+        t = self.t_embedder(t)                   # (B, D)
+        y = self.y_embedder(y, self.training)    # (B, 1, D)
+        c = t.unsqueeze(dim =1) + y              # (B, 1, D) -> (B, 1, D)
+        for block in self.blocks:
+            x = block(x, c)                      # (B, L, D) -> (B, L, D)
+        x = self.final_decoder(x)                # (B, L, D) -> (B, C, H, W)
+        return x
