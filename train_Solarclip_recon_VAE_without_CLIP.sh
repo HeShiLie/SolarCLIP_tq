@@ -8,7 +8,7 @@
 # mkdir -p ./log/recon/VAE_without_CLIP/hidden_128/magnet-magnet
 # mkdir -p ./log/recon/VAE_without_CLIP/hidden_128_block3/magnet-magnet
 # mkdir -p ./log/recon/VAE_without_CLIP/hidden_160/magnet-magnet
-mkdir -p "./log/recon/VAE_without_CLIP/layers_3_kernels_[7,7,3]_strides_[4,4,2]/magnet-magnet"
+# mkdir -p "./log/recon/VAE_without_CLIP/layers_3_kernels_[7,7,3]_strides_[4,4,2]/magnet-magnet"
 
 
 # CUDA_VISIBLE_DEVICES=0 torchrun --nnodes=1 --nproc_per_node=1 --master_addr="10.200.48.105" --master_port=9012 Train_Solarclip_recon_VAE_without_CLIP.py \
