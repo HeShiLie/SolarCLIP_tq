@@ -357,7 +357,7 @@ def count_cv(pixel_values, tubelet_size = [1, 64, 64], discrete=False, weight_or
     weights = weights.repeat(1, 1, 1, c, h, w)
     weights = pixel_unpatchify(weights, tubelet_size, image_size)
 
-    weights = (weights/weights.sum())*(image_size**2)
+    weights = (weights/weights.sum())*(image_size**2)*B
     return weights, token_weights
 
 def count_cv_rdbu(pixel_values, tubelet_size = [1, 64, 64], discrete=False):
@@ -386,7 +386,7 @@ def count_cv_rdbu(pixel_values, tubelet_size = [1, 64, 64], discrete=False):
     weights = weights.repeat(1, 1, c, h, w)
     weights = pixel_unpatchify(weights, tubelet_size,image_size)
 
-    weights = (weights/weights.sum())*(image_size**2)
+    weights = (weights/weights.sum())*(image_size**2)*B
     return weights, token_weights
 
 def get_weights(loss_patch, pixel_values):

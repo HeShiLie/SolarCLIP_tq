@@ -1,0 +1,54 @@
+{
+    "config_dir": "None",
+    "vae_config_dir": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/recon/DiTlike/VAEpretrain/0094-0094/_0912_res_true_attn_flase/args.json",
+    "vae_model_id": 240,
+    "clip_model_path": "checkpoints/recon/0816_test1/SolarCLIP",
+    "clip_model_id": 200,
+    "global_batch_size": 90,
+    "global_seed": 42,
+    "optimizer": "AdamW",
+    "learning_rate": 5e-06,
+    "epochs": 1000,
+    "test_freq": 100,
+    "save_freq": 100,
+    "checkpoint_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/recon/DiTlike",
+    "num_workers": 0,
+    "machine": "A40",
+    "sampler": "distributed",
+    "input_size": 64,
+    "patch_size": 4,
+    "in_channels": 3,
+    "width": 768,
+    "norm_type": "bn1d",
+    "depth": 12,
+    "num_heads": 48,
+    "token_type": "all embedding",
+    "layers": 12,
+    "learn_sigma": true,
+    "deprojection_type": "linear",
+    "with_bias": true,
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "enhance_list": [
+        [
+            "log1p",
+            1
+        ],
+        [
+            "log1p",
+            1
+        ]
+    ],
+    "image_preprocess": [
+        1024,
+        0.5,
+        90
+    ],
+    "weight_type_list": [
+        "cv-rdbu",
+        "3sgm-continous"
+    ],
+    "decoder_modal": "0094-0094"
+}

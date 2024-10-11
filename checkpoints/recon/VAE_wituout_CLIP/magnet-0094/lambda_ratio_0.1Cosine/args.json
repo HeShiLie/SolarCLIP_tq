@@ -1,0 +1,46 @@
+{
+    "config_dir": "None",
+    "global_batch_size": 6,
+    "global_seed": 42,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0001,
+    "epochs": 1000,
+    "test_freq": 100,
+    "save_freq": 100,
+    "checkpoint_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/recon/VAE_wituout_CLIP",
+    "num_workers": 0,
+    "machine": "A40",
+    "sampler": "distributed",
+    "loss_type": "MSE",
+    "input_size": 1024,
+    "image_channels": 1,
+    "hidden_dim": 64,
+    "num_groups": 16,
+    "latent_dim": 3,
+    "lambda_ratio": 0.1,
+    "Annealing": "Cosine",
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "enhance_list": [
+        [
+            "log1p",
+            1
+        ],
+        [
+            "log1p",
+            1
+        ]
+    ],
+    "image_preprocess": [
+        1024,
+        0.5,
+        90
+    ],
+    "weight_type_list": [
+        "cv-rdbu",
+        "3sgm-continous"
+    ],
+    "decoder_modal": "magnet-0094"
+}

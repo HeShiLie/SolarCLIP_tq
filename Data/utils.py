@@ -9,7 +9,7 @@ from astropy.io import fits
 
 
 def read_pt_image(path):
-    return torch.load(path)
+    return torch.load(path, weights_only=True)
 
 
 def read_fits_image(path):
@@ -77,10 +77,8 @@ def make_dir_list(modal):
                 for current_data_minutes in range(60):
                     formatted_hours = f"{current_date_hours:02d}"
                     formatted_minutes = f"{current_data_minutes:02d}"
-                    path_pt = f"/mnt/nas/home/huxing/202407/nas/data/hmi/magnet_pt/{
-                        date_str_1}/hmi.M_720s.{date_str_2}_{formatted_hours}{formatted_minutes}00_TAI.pt"
-                    path_fits = f"/mnt/nas/home/huxing/202407/nas/data/hmi/fits/hmi.M_720s.{
-                        date_str_2}_{formatted_hours}{formatted_minutes}00_TAI.fits"
+                    path_pt = f"/mnt/nas/home/huxing/202407/nas/data/hmi/magnet_pt/{date_str_1}/hmi.M_720s.{date_str_2}_{formatted_hours}{formatted_minutes}00_TAI.pt"
+                    path_fits = f"/mnt/nas/home/huxing/202407/nas/data/hmi/fits/hmi.M_720s.{date_str_2}_{formatted_hours}{formatted_minutes}00_TAI.fits"
                     dir_list_pt.append(path_pt)
                     dir_list_fits.append(path_fits)
             current_date += one_day
@@ -102,10 +100,8 @@ def make_dir_list(modal):
                 for current_data_minutes in range(60):
                     formatted_hours = f"{current_date_hours:02d}"
                     formatted_minutes = f"{current_data_minutes:02d}"
-                    path_pt = f"/mnt/nas/home/huxing/202407/nas/data/spectral/0094_pt/{
-                        date_str_1}/AIA{date_str_2}_{formatted_hours}{formatted_minutes}_0094.pt"
-                    path_fits = f"/mnt/nas/home/zhouyuqing/downloads/AIA{
-                        date_str_2}_{formatted_hours}{formatted_minutes}_0094.fits"
+                    path_pt = f"/mnt/nas/home/huxing/202407/nas/data/spectral/0094_pt/{date_str_1}/AIA{date_str_2}_{formatted_hours}{formatted_minutes}_0094.pt"
+                    path_fits = f"/mnt/nas/home/zhouyuqing/downloads/AIA{date_str_2}_{formatted_hours}{formatted_minutes}_0094.fits"
                     # /mnt/nas/home/zhouyuqing/downloads/AIA20100501_0000_0094.fits
                     dir_list_pt.append(path_pt)
                     dir_list_fits.append(path_fits)

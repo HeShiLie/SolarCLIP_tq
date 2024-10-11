@@ -1,0 +1,64 @@
+{
+    "config_dir": "None",
+    "vae_config_dir": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/recon/DiTlike/VAEpretrain/0094-0094/_0912_res_true_attn_flase/args.json",
+    "vae_model_id": 240,
+    "clip_model_path": "checkpoints/recon/0816_test1/SolarCLIP",
+    "clip_model_id": 200,
+    "global_batch_size": 90,
+    "global_seed": 42,
+    "optimizer": "AdamW",
+    "learning_rate": 3e-06,
+    "epochs": 1000,
+    "test_freq": 100,
+    "save_freq": 100,
+    "checkpoint_path": "/mnt/nas/home/huxing/202407/ctf/SolarCLIP_tq/checkpoints/recon/DiUnetlike",
+    "num_workers": 0,
+    "machine": "A40",
+    "sampler": "distributed",
+    "input_size": 64,
+    "dim": 64,
+    "init_dim": null,
+    "out_dim": null,
+    "dim_mults": [
+        1,
+        2,
+        4,
+        8
+    ],
+    "channels": 3,
+    "self_condition": true,
+    "learned_variance": true,
+    "learned_sinusoidal_cond": false,
+    "random_fourier_features": false,
+    "learned_sinusoidal_dim": 64,
+    "sinusoidal_pos_emb_theta": 10000,
+    "dropout": 0.1,
+    "attn_dim_head": 32,
+    "attn_heads": 4,
+    "full_attn": null,
+    "flash_attn": false,
+    "modal_list": [
+        "magnet",
+        "0094"
+    ],
+    "enhance_list": [
+        [
+            "log1p",
+            1
+        ],
+        [
+            "log1p",
+            1
+        ]
+    ],
+    "image_preprocess": [
+        1024,
+        0.5,
+        90
+    ],
+    "weight_type_list": [
+        "cv-rdbu",
+        "3sgm-continous"
+    ],
+    "decoder_modal": "0094-0094"
+}
